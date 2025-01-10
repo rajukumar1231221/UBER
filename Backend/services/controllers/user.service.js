@@ -10,7 +10,7 @@ const createUser = async({
 
     const existingUser = await userModel.findOne({email});
     if(existingUser){
-        throw new Error("Email is already in use");
+        throw new Error("Email is already exist");
         
     }
     // try catch hatana hai
