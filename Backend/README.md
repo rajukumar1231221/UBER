@@ -129,6 +129,73 @@ The request body should be a JSON object containing the following fields:
     - `capacity` (number, minimum: 1)
     - `vehicleType` (string, one of: 'car', 'motorcycle', 'auto')
 
-
   - `message` (string): "successfully created captain"
   - `token` (string): JWT Token
+
+# Captain Login Endpoint
+
+## Endpoint
+`POST /captains/login`
+
+# HTTP METHOD 
+`POST`
+
+## Description
+This endpoint is used to log in an existing captain. It validates the input data, checks the captain's credentials, and returns a JSON Web Token (JWT) along with the captain details if the credentials are valid.
+
+## Request Body
+The request body should be a JSON object containing the following fields:
+
+- `email` (string, required, must be a valid email)
+- `password` (string, required, minimum length: 6)
+
+## Example Response
+
+- `message` (string): "logged in successfully"
+- `token` (string): JWT Token
+- `captain`: An object containing the captain details.
+
+# Captain Profile Endpoint
+
+## Endpoint
+`GET /captains/profile`
+
+# HTTP METHOD 
+`GET`
+
+## Description
+This endpoint is used to get the profile of the currently authenticated captain. It requires a valid JWT token.
+
+## Headers
+- `Authorization`: Bearer <JWT Token>
+
+## Example Response
+
+- `captain`: An object containing the captain details:
+  - `fullName` (object):
+    - `firstName` (string)
+    - `lastName` (string)
+  - `email` (string)
+  - `vehicle` (object):
+    - `color` (string)
+    - `plate` (string)
+    - `capacity` (number)
+    - `vehicleType` (string)
+
+# Captain Logout Endpoint
+
+## Endpoint
+`GET /captains/logout`
+
+# HTTP METHOD 
+`GET`
+
+## Description
+This endpoint is used to log out the currently authenticated captain. It clears the authentication token and adds it to the blacklist.
+
+## Headers
+- `Authorization`: Bearer <JWT Token>
+
+## Example Response
+
+- `message` (string): "Logout successfully"
