@@ -1,6 +1,6 @@
 import cookieParser from "cookie-parser";
 import userModel from "../models/user.model.js";
-import createUser from "./user.service.js";
+import createUser from "../ModelSevices/user.service.js";
 import {validationResult} from 'express-validator';
 import blacklistTokenModel from "../models/blacklistToken.model.js";
 
@@ -13,6 +13,11 @@ import blacklistTokenModel from "../models/blacklistToken.model.js";
 
     const {fullName,email,password} = req.body;
 
+
+    const isUserAlreadyexist = await  userModel.findOne({email});
+    if(isUserAlreadyexist){
+        return res.status(400).json({message:'User already exist'});
+    }
     const hashedPassword = await userModel.hashPassword(password);
 
     const user = await createUser({

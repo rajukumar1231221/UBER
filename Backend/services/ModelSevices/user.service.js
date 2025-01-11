@@ -7,13 +7,7 @@ const createUser = async({
         throw new Error('All fields are required');
     };
 
-
-    const existingUser = await userModel.findOne({email});
-    if(existingUser){
-        throw new Error("Email is already exist");
-        
-    }
-    // try catch hatana hai
+    
   try {
     const user = userModel.create({
         fullName:{
