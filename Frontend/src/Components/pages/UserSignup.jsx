@@ -1,52 +1,45 @@
-
-
+import React from 'react'
+import axios from 'axios';
 import { useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import {UserDataContext} from '../../context/UserContext';
 const UserSignup = () => {
- const [val,setVal] = useState({
- fullName:{
-  firstName:"",
-  lastName:""
- },
-  email: "",
-  password:""
- });
+  const [email,setEmail]= useState('');
+  const [firstName,setFirstName]= useState('');
+  const [password,setPassword]= useState('');
+  const [lastName,setLastName]= useState('');
+  // const [userData,setUserData]= useState('');
 
-function submithandler (e){
+  const navigate = useNavigate()
 
+  const [user,setUser] = React.useContext(UserDataContext)
+ const submitHandler = async(e)=>{
   e.preventDefault();
-  setVal({
+   const newUser = {
     fullName:{
-      firstName:"",
-      lastName:""
-     },
-    email: "",
-    password:""
-  });
+      firstName:firstName,
+      lastName:lastName
+    },
+    email:email,
+    password:password
+   }
+   setEmail('')
+   setFirstName('')
+   setLastName('')
+   setPassword('')
+   const response = await axios.post(`http://localhost:5000/users/register`,newUser)
+   console.log(response);
 
-  console.log(val);
+   if (response.status === 201){
+    const data = response.data;
+
+    setUser(data.user)
+  localStorage.setItem('token',data.token)
+
+    navigate('/home')
+   }
+   
 }
-function handlechange(e) {
-  const { name, value } = e.target;
-
-  setVal((prev) => {
-    if (name === "firstName" || name === "lastName") {
-      return {
-        ...prev,
-        fullName: {
-          ...prev.fullName,
-          [name]: value,
-        },
-      };
-    }
-
-    return {
-      ...prev,
-      [name]: value,
-    };
-  });
-}
-
 
 
   return (
@@ -55,28 +48,36 @@ function handlechange(e) {
    <div>
    <img className="w-20 bg-transparent   mb-3" src="https://th.bing.com/th/id/R.67cf0bb07efc4b9c50e21a1db47e8a20?rik=IvByoJBalTGuBg&riu=http%3a%2f%2fpngimg.com%2fuploads%2fuber%2fuber_PNG19.png&ehk=m98MZAddxW7I7h0lBtB3aSHZdeeVEtp1w5TA6ctv71w%3d&risl=&pid=ImgRaw&r=0" alt="" />
 
-<form action="" method="POST" encType="multipart/form-data" onSubmit={submithandler}>
+<form action="" method="POST" encType="multipart/form-data" onSubmit={(e)=>{submitHandler(e)}}>
 
   <h3 className="text-lg mb-2 font-medium">What&apos;s your name</h3>
   <div className="flex mb-3  gap-3">
-  <input type="text" name="firstName" onChange={handlechange} value={val.fullName.firstName} 
+  <input type="text" name="firstName" onChange={(e)=>{
+  setFirstName(e.target.value)
+}} value={firstName} 
 required id="" className="bg-[#eeeeee] mb-5 outline-1 
 rounded px-4 py-2 border w-1/2   text-lg placeholder:text-sm" 
 placeholder="First name"/>
  
-  <input type="text" name="lastName" value={val.fullName.lastName} onChange={handlechange} 
+  <input type="text" name="lastName" value={lastName} onChange={(e)=>{
+  setLastName(e.target.value)
+}} 
 required id="" className="bg-[#eeeeee] mb-5 outline-1
  rounded px-4 py-2 border w-1/2  text-lg placeholder:text-sm" 
 placeholder="Last name"/>
 </div>
 
 <h3 className="text-lg mb-2 font-medium">What&apos;s your email</h3>
-<input type="email" name="email" value={val.email} 
-required id="" onChange={handlechange} className="bg-[#eeeeee] mb-7 outline-1 rounded px-4 py-2 border w-full text-lg placeholder:text-sm" 
+<input type="email" name="email" value={email} 
+required id="" onChange={(e)=>{
+  setEmail(e.target.value)
+}} className="bg-[#eeeeee] mb-7 outline-1 rounded px-4 py-2 border w-full text-lg placeholder:text-sm" 
 placeholder="Enter Your Email"/>
 
 <h3 className="text-lg mb-2 font-medium">Enter Password</h3>
-<input type="password" name="password" value={val.password}  onChange={handlechange}
+<input type="password" name="password" value={password}  onChange={(e)=>{
+  setPassword(e.target.value)
+}}
 required placeholder="Enter Your Password"
  id=""  className="bg-[#eeeeee] mb-5 rounded px-4 
  outline-1 py-2 border w-full text-lg placeholder:text-sm" />

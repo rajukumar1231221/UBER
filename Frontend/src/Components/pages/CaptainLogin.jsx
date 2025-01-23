@@ -1,19 +1,39 @@
-import { useState } from "react"
-import { Link } from "react-router-dom"
+import { useState, useContext } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { CaptainDataContext } from "../../context/CaptainContext";
+import axios from "axios";
 const CaptainLogin = () => {
-  
   const [email,setEmail]= useState('');
   const [password,setPassword]= useState('');
-  const [captainData,setCaptain]= useState({});
- const submitHandler = (e)=>{
+
+  // const [userData,setUserData]= useState('');
+
+  const navigate = useNavigate()
+ 
+ const { captain, setCaptain } = useContext(CaptainDataContext)  
+ const submitHandler = async(e)=>{
   e.preventDefault();
-  setCaptain({
+   const CaptainData = {
     email:email,
-    password:password
-  });
-  console.log(captainData);
-  setEmail('')
-  setPassword('')
+    password:password,
+   }
+   try {
+     console.log('Sending login request:', CaptainData);
+     const response = await axios.post(`http://localhost:5000/captains/login`,CaptainData)   
+     console.log('API Response:', response);
+     if (response.status === 201){
+       const data = response.data;
+       console.log('Login successful:', data);
+       setCaptain(data.captain)
+       localStorage.setItem('token',data.token)  
+       navigate('/captain-home') 
+     }
+   } catch (error) {
+     console.error('Login error:', error.response?.data || error.message);
+   } finally {
+     setEmail('')
+     setPassword('')
+   }
 }
   return (
     <>
@@ -22,7 +42,7 @@ const CaptainLogin = () => {
    <img className="w-28 bg-transparent   mb-3"
    style={{marginLeft:'-10px'}} src="https://static.vecteezy.com/system/resources/previews/027/127/451/non_2x/uber-logo-uber-icon-transparent-free-png.png" alt="" />
 
-<form action="" onSubmit={(e)=>{submitHandler(e)}}>
+<form method="POST" onSubmit={(e)=>{submitHandler(e)}} encType="multipart/form-data" action="" >
 <h3 className="text-lg mb-2 font-medium">What&apos;s your email</h3>
 
 <input type="email" name="email" value={email} onChange={(e)=>{
@@ -33,7 +53,7 @@ placeholder="Enter Your Email"/>
 
 <h3 className="text-lg mb-2 font-medium">Enter Password</h3>
 
-<input type="password" name="password" value={password} onChange={(e)=>{
+<input type="password" name="password" value={password}  onChange={(e)=>{
   setPassword(e.target.value)
 }}
 required placeholder="Enter Your Password"
