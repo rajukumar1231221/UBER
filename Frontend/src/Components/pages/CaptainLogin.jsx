@@ -1,40 +1,49 @@
 import { useState, useContext } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { CaptainDataContext } from "../../context/CaptainContext";
-import axios from "axios";
+import { captianLoginThunk } from "../../redux/captain.slice";
+import { useDispatch, useSelector } from "react-redux";
 const CaptainLogin = () => {
   const [email,setEmail]= useState('');
   const [password,setPassword]= useState('');
 
-  // const [userData,setUserData]= useState('');
-
   const navigate = useNavigate()
  
- const { captain, setCaptain } = useContext(CaptainDataContext)  
+  const dispatch = useDispatch()
+  const result = useSelector((state)=>state.captain.captainData); 
+  console.log(result);
  const submitHandler = async(e)=>{
   e.preventDefault();
-   const CaptainData = {
-    email:email,
-    password:password,
-   }
-   try {
-     console.log('Sending login request:', CaptainData);
-     const response = await axios.post(`http://localhost:5000/captains/login`,CaptainData)   
-     console.log('API Response:', response);
-     if (response.status === 201){
-       const data = response.data;
-       console.log('Login successful:', data);
-       setCaptain(data.captain)
-       localStorage.setItem('token',data.token)  
-       navigate('/captain-home') 
-     }
-   } catch (error) {
-     console.error('Login error:', error.response?.data || error.message);
-   } finally {
-     setEmail('')
-     setPassword('')
-   }
-}
+  
+      e.preventDefault();
+      if(email && password){
+        const CaptainLoginData = {
+          email:email,
+          password:password,
+         }
+        
+        try {
+         const response = await dispatch(captianLoginThunk(CaptainLoginData)).unwrap()
+          console.log("logged in successfully");
+          
+          localStorage.setItem('token',response.token)
+          navigate("/captain-home")
+          
+        } catch (e) {
+          console.log(e);
+          
+        }
+  
+      }else{
+        alert("all field are required")
+      } 
+      
+      setEmail('')
+      setPassword('')
+  
+      
+  
+  
+    }
   return (
     <>
      <div className="p-7 h-screen flex flex-col justify-between">

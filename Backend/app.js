@@ -2,9 +2,8 @@ import  'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser'
-import router from './services/routes/user.routes.js';
-import captainRouter from './services/routes/captain.routes.js';
 import userRouter from './services/routes/user.routes.js';
+import captainRouter from './services/routes/captain.routes.js';
 const app = express();
 
 

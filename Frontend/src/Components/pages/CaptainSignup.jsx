@@ -1,8 +1,8 @@
 
-import React, { useContext, useState } from "react"
-import { Link, useNavigate } from "react-router-dom"
-import { CaptainDataContext } from "../../context/CaptainContext";
-import axios from "axios";
+import  {  useState } from "react"
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { captainThunk } from "../../redux/captain.slice";
 const CaptainSignup = () => {
   const [email,setEmail]= useState('');
   const [firstName,setFirstName]= useState('');
@@ -16,44 +16,53 @@ const CaptainSignup = () => {
   // const [userData,setUserData]= useState('');
 
   const navigate = useNavigate()
- 
- const { captain, setCaptain } = useContext(CaptainDataContext)  
+  const dispatch = useDispatch();
+  const result = useSelector((state)=>state.captain.captainData);  
+  console.log(result);
  const submitHandler = async(e)=>{
-  e.preventDefault();
-   const CaptainData = {
-    fullName:{
-      firstName:firstName,
-      lastName:lastName
-    },
-    email:email,
-    password:password,
-    vehicle:{
-      vehicleType:vehicleType,
-      plate:vehiclePlate,
-      color:vehicleColor,
-      capacity:vehicleCapacity
-    } 
+    e.preventDefault();
+       if(firstName && lastName && email && password && vehicleType
+         && vehiclePlate && 
+         vehicleColor && vehicleCapacity){  
+             try {
+   
+              const CaptainData = {
+                fullName:{
+                  firstName:firstName,
+                  lastName:lastName
+                },
+                email:email,
+                password:password,
+                vehicle:{
+                  vehicleType:vehicleType,
+                  plate:vehiclePlate,
+                  color:vehicleColor,
+                  capacity:vehicleCapacity
+                } 
+               }
+             const response =  await dispatch(captainThunk(CaptainData)).unwrap();
+           localStorage.setItem('token',response.token)
+   
+               navigate("/Captain-home")
+             } catch (e) {
+               console.log(e);
+               
+             }
+   
+       }else{
+         alert("all fields are required")
+       }
+       setEmail('')
+       setFirstName('') 
+       setLastName('')
+       setPassword('')
+       setVehicleCapacity('') 
+       setVehicleColor('')  
+       setVehiclePlate('')  
+       setVehicleType('')
+      
+   
    }
-   const response = await axios.post(`http://localhost:5000/captains/register`,CaptainData)   
-   if (response.status === 201){
-    const data = response.data;
-    setCaptain(data.captain)
-    localStorage.setItem('token',data.token)  
-    navigate('/Captain-home') 
-   }
-   
-   setEmail('')
-   setFirstName('') 
-   setLastName('')
-   setPassword('')
-   setVehicleCapacity('') 
-   setVehicleColor('')  
-   setVehiclePlate('')  
-   setVehicleType('')
-  
-   
-   
-}
   return (
     <>
      <div className="py-7 px-7 h-screen flex flex-col justify-between">

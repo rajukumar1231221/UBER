@@ -4,7 +4,6 @@ import {registerUser,loginUser, getUserProfile, logoutUser} from '../controllers
 import { authUser } from '../middlewares/auth.middleware.js';
 const userRouter = express.Router();
 
-
 userRouter.post('/register',[
 body('email').isEmail().withMessage('Invalid Email'),
 body('fullName.firstName').isLength({min:3}).
