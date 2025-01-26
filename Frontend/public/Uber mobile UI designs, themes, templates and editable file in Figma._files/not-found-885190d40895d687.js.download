@@ -1,9 +1,0 @@
-(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[9160],{76799:function(e,r,t){Promise.resolve().then(t.bind(t,62534)),Promise.resolve().then(t.bind(t,87234))},62534:function(e,r,t){"use strict";t.r(r);var n=t(57437),o=t(24033);r.default=function(){let e=(0,o.useRouter)();return(0,n.jsx)("div",{style:{textDecoration:"none"},className:"error-masg-btn",onClick:()=>e.push("/"),children:"Return Home"})}},30622:function(e,r,t){"use strict";/**
- * @license React
- * react-jsx-runtime.production.min.js
- *
- * Copyright (c) Meta Platforms, Inc. and affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */var n=t(2265),o=Symbol.for("react.element"),s=Symbol.for("react.fragment"),u=Object.prototype.hasOwnProperty,i=n.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED.ReactCurrentOwner,f={key:!0,ref:!0,__self:!0,__source:!0};function q(e,r,t){var n,s={},c=null,l=null;for(n in void 0!==t&&(c=""+t),void 0!==r.key&&(c=""+r.key),void 0!==r.ref&&(l=r.ref),r)u.call(r,n)&&!f.hasOwnProperty(n)&&(s[n]=r[n]);if(e&&e.defaultProps)for(n in r=e.defaultProps)void 0===s[n]&&(s[n]=r[n]);return{$$typeof:o,type:e,key:c,ref:l,props:s,_owner:i.current}}r.Fragment=s,r.jsx=q,r.jsxs=q},57437:function(e,r,t){"use strict";e.exports=t(30622)},24033:function(e,r,t){e.exports=t(50094)}},function(e){e.O(0,[8943,7234,2971,2472,1744],function(){return e(e.s=76799)}),_N_E=e.O()}]);

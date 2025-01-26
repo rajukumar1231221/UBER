@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom"
 import { userLoginThunk } from "../../redux/user.slice";
@@ -7,40 +7,40 @@ const UserLogin = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-const dispatch = useDispatch()
-const result = useSelector((state)=>state.user.usersData);
-console.log(result);
+  const dispatch = useDispatch()
+  const result = useSelector((state) => state.user.usersData);
+  console.log(result);
 
   const navigate = useNavigate()
 
   const submitHandler = async (e) => {
-   
+
     e.preventDefault();
-    if(email && password){
+    if (email && password) {
       const UserLoginData = {
         email: email,
         password: password
       };
       try {
-       const response = await dispatch(userLoginThunk(UserLoginData)).unwrap()
+        const response = await dispatch(userLoginThunk(UserLoginData)).unwrap()
         console.log("logged in successfully");
-        
-        localStorage.setItem('token',response.token)
+
+        localStorage.setItem('token', response.token)
         navigate("/home")
-        
+
       } catch (e) {
         console.log(e);
-        
+
       }
 
-    }else{
+    } else {
       alert("all field are required")
-    } 
-    
+    }
+
     setEmail('')
     setPassword('')
 
-    
+
 
 
   }
